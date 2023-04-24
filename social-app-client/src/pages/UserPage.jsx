@@ -11,7 +11,7 @@ const UserPage = () => {
     const fetchUser = async () => {
       try {
         // Replace this URL with the actual API endpoint for fetching the user data.
-        const response = await axios.get(`https://api.example.com/users/${userId}`);
+        const response = await axios.get(`/api/users/${userId}`);
         setUser(response.data);
       } catch (error) {
         console.error('Error fetching user data:', error);

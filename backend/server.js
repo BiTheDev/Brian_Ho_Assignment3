@@ -3,6 +3,7 @@ const cors = require('cors');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const userRoutes = require('./routes/userRoutes');
+const postRoutes = require('./routes/postRoutes');
 
 dotenv.config();
 
@@ -19,9 +20,10 @@ db.once('open', () => {
 });
 
 // Define your routes here
-app.use('/api/users', userRoutes);
+app.use('/users', userRoutes);
+app.use('/posts', postRoutes);
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5001;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
