@@ -39,16 +39,16 @@ const UserPage = () => {
       <Typography variant="subtitle1" align="center" gutterBottom>
         Joined: {new Date(user.joined).toLocaleDateString()}
       </Typography>
-      <Box sx={{ display: 'flex', justifyContent: 'center', marginBottom: 2 }}>
+      {/* <Box sx={{ display: 'flex', justifyContent: 'center', marginBottom: 2 }}>
         <Button variant="outlined" color="primary">
           Edit Description
         </Button>
-      </Box>
+      </Box> */}
       <Typography variant="body1" paragraph>
         {user.description}
       </Typography>
       <Typography variant="h5" gutterBottom>
-        Status Updates
+        Status Feeds
       </Typography>
       {user.statusUpdates.map((update) => (
         <Box key={update.id} sx={{ marginBottom: 2 }}>

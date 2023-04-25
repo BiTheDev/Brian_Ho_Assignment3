@@ -8,6 +8,7 @@ router.get("/", async (req, res) => {
     const posts = users.flatMap((user) =>
       user.statusUpdates.map((update) => ({
         _id: update._id,
+        userId: user._id,
         username: user.username,
         content: update.content,
         timestamp: update.timestamp,
