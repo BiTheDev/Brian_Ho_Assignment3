@@ -2,6 +2,16 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import { useAuth } from "../authContext";
+import {
+  Container,
+  Box,
+  Typography,
+  TextField,
+  Button,
+  Card,
+  CardContent,
+  CardActions,
+} from "@mui/material";
 
 const HomePage = () => {
   const [posts, setPosts] = useState([]);
@@ -62,56 +72,92 @@ const HomePage = () => {
   };
 
   return (
-    <div>
-      <h1>Recent Posts</h1>
-      {user && (
-        <div>
-          <input
-            type="text"
-            value={newPostContent}
-            onChange={(e) => setNewPostContent(e.target.value)}
-            placeholder="Write a new post"
-          />
-          <button onClick={createPost}>Post</button>
-        </div>
-      )}
+    <Container maxWidth="sm">
+      <Box textAlign="center" marginBottom={4}>
+        <Typography variant="h4">Recent Posts</Typography>
+        {user && (
+          <Box marginTop={2}>
+            <TextField
+              fullWidth
+              value={newPostContent}
+              onChange={(e) => setNewPostContent(e.target.value)}
+              placeholder="Write a new post"
+              variant="outlined"
+            />
+            <Button
+              fullWidth
+              onClick={createPost}
+              variant="contained"
+              color="primary"
+              sx={{ marginTop: 2 }}
+            >
+              Post
+            </Button>
+          </Box>
+        )}
+      </Box>
       {posts.length > 0 ? (
         posts.map((post) => (
-          <div key={post._id}>
-            <h3>
-              <Link to={`/users/${post.userId}`}>{post.username}</Link>
-            </h3>
-            {editingPost === post._id ? (
-              <div>
-                <input
-                  type="text"
+          <Card key={post._id} sx={{ marginBottom: 2 }}>
+            <CardContent>
+              <Typography variant="h6">
+                <Link to={`/users/${post.userId}`}>{post.username}</Link>
+              </Typography>
+              {editingPost === post._id ? (
+                <TextField
+                  fullWidth
                   value={editingContent}
                   onChange={(e) => setEditingContent(e.target.value)}
                 />
-                <button onClick={() => updatePost(post._id)}>Save</button>
-                <button onClick={() => setEditingPost(null)}>Cancel</button>
-              </div>
-            ) : (
-              <p>{post.content}</p>
-            )}
-            <p>{new Date(post.timestamp).toLocaleString()}</p>
+              ) : (
+                <Typography>{post.content}</Typography>
+              )}
+              <Typography variant="subtitle2" color="text.secondary">
+                {new Date(post.timestamp).toLocaleString()}
+              </Typography>
+            </CardContent>
             {user && user.username === post.username && (
-              <div>
-                {editingPost !== post._id && (
-                  <button onClick={() => {
-                    setEditingPost(post._id);
-                    setEditingContent(post.content);
-                  }}>Edit</button>
+              <CardActions>
+                {editingPost !== post._id ? (
+                  <Button
+                    onClick={() => {
+                      setEditingPost(post._id);
+                      setEditingContent(post.content);
+                    }}
+                    color="primary"
+                  >
+                    Edit
+                  </Button>
+                ) : (
+                  <>
+                    <Button
+                      onClick={() => updatePost(post._id)}
+                      color="primary"
+                    >
+                      Save
+                    </Button>
+                    <Button
+                      onClick={() => setEditingPost(null)}
+                      color="secondary"
+                    >
+                      Cancel
+                    </Button>
+                  </>
                 )}
-                <button onClick={() => deletePost(post._id)}>Delete</button>
-              </div>
+                <Button
+                  onClick={() => deletePost(post._id)}
+                  color="error"
+                >
+                  Delete
+                </Button>
+              </CardActions>
             )}
-          </div>
+          </Card>
         ))
       ) : (
-        <p>Loading posts...</p>
+        <Typography>Loading posts...</Typography>
       )}
-    </div>
+    </Container>
   );
 };
 
