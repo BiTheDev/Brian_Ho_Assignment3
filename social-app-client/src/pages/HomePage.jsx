@@ -14,7 +14,8 @@ const HomePage = () => {
     const fetchPosts = async () => {
       try {
         const response = await axios.get("/api/posts");
-        setPosts(response.data);
+        const sortedPosts = response.data.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+        setPosts(sortedPosts);
       } catch (error) {
         console.error("Error fetching posts:", error);
       }
@@ -22,6 +23,7 @@ const HomePage = () => {
 
     fetchPosts();
   }, []);
+
 
   const createPost = async () => {
     try {
