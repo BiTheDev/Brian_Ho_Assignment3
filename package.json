@@ -1,0 +1,31 @@
+{
+    "name": "brian_ho_assignment3",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "workspaces": [
+      "backend",
+      "social-app-client"
+    ],
+    "scripts": {
+      "test": "echo \"Error: no test specified\" && exit 1",
+      "dev": "concurrently \"npm run dev -w backend\" \"npm run dev -w social-app-client\"",
+      "build": "npm run build -ws --if-present",
+      "prod": "npm run start -w backend"
+    },
+    "repository": {
+      "type": "git",
+      "url": "git+https://github.com/BiTheDev/Brian_Ho_Assignment3.git"
+    },
+    "author": "",
+    "license": "ISC",
+    "bugs": {
+      "url": "https://github.com/BiTheDev/Brian_Ho_Assignment3/issues"
+    },
+    "homepage": "https://github.com/BiTheDev/Brian_Ho_Assignment3#readme",
+    "dependencies": {
+    },
+    "devDependencies": {
+      "concurrently": "^8.0.1"
+    }
+  }
