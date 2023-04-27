@@ -12,7 +12,6 @@ import {
   CardContent,
   CardActions,
 } from "@mui/material";
-import { post } from "../../../backend/routes/userRoutes";
 
 const HomePage = () => {
   const [posts, setPosts] = useState([]);
