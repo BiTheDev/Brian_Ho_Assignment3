@@ -92,7 +92,9 @@ router.delete('/:userId/statusUpdates/:statusUpdateId', async (req, res) => {
     }
     console.log("status update: ", statusUpdate)
     statusUpdate.remove()
+    console.log("status remove successfully")
     await user.save();
+    console.log("user saved")
     res.json({ message: 'Status update deleted successfully' });
   } catch (error) {
     res.status(500).json({ error: 'Server error' });
