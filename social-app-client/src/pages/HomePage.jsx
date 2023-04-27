@@ -24,7 +24,12 @@ const HomePage = () => {
     const fetchPosts = async () => {
       try {
         const response = await axios.get("/api/posts");
-        const sortedPosts = response.data.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+        const sortedPosts = response.data.sort((a, b) => {
+          if (a.timestamp && b.timestamp) {
+            return new Date(b.timestamp) - new Date(a.timestamp);
+          }
+          return 0;
+        });
         setPosts(sortedPosts);
       } catch (error) {
         console.error("Error fetching posts:", error);
