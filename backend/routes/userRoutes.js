@@ -79,7 +79,16 @@ router.delete('/:userId/statusUpdates/:statusUpdateId', async (req, res) => {
   console.log("Deleting status update:", req.params.userId, req.params.statusUpdateId);
   try {
     const user = await User.findById(req.params.userId);
-    user.statusUpdates.id(req.params.statusUpdateId).remove();
+    if (!user) {
+      console.log("User not found:", req.params.userId);
+      return res.status(404).json({ error: 'User not found' });
+    }
+    const statusUpdate = user.statusUpdates.id(req.params.statusUpdateId);
+    if (!statusUpdate) {
+      console.log("Status update not found:", req.params.statusUpdateId);
+      return res.status(404).json({ error: 'Status update not found' });
+    }
+    statusUpdate.remove()
     await user.save();
     res.json({ message: 'Status update deleted successfully' });
   } catch (error) {
