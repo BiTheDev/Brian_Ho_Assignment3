@@ -31,10 +31,10 @@ app.use('/api/users', userRoutes);
 app.use('/api/posts', postRoutes);
 
 
-app.get('*', function (req, res) {
-  console.log("received request");
-  res.sendFile(path.join(frontend_dir, "index.html"));
-});
+// app.get('*', function (req, res) {
+//   console.log("received request");
+//   res.sendFile(path.join(frontend_dir, "index.html"));
+// });
 
 app.listen(process.env.PORT || 10000, function() {
   console.log(`Starting server now on port ${process.env.PORT || 10000}`);
