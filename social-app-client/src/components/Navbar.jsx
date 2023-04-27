@@ -24,7 +24,7 @@ const Navbar = () => {
               color: 'inherit',
               textDecoration: 'none',
             }} >
-          My Social App
+          Social App
         </Typography>
         {!user ? (
           <Box>

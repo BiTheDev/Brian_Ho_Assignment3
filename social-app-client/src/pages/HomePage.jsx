@@ -24,9 +24,8 @@ const HomePage = () => {
     const fetchPosts = async () => {
       try {
         const response = await axios.get("/api/posts");
-        const posts = Array.from(response);
-        console.log(posts)
-        const sortedPosts = posts.data.sort((a, b) => {
+        const posts = response.data;
+        const sortedPosts = posts.sort((a, b) => {
           if (a.timestamp && b.timestamp) {
             return new Date(b.timestamp) - new Date(a.timestamp);
           }
