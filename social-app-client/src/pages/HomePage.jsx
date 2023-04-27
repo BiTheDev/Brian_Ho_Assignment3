@@ -24,13 +24,18 @@ const HomePage = () => {
     const fetchPosts = async () => {
       try {
         const response = await axios.get("/api/posts");
-        const sortedPosts = response.data.sort((a, b) => {
-          if (a.timestamp && b.timestamp) {
-            return new Date(b.timestamp) - new Date(a.timestamp);
-          }
-          return 0;
-        });
-        setPosts(sortedPosts);
+
+        if (Array.isArray(response.data)) {
+          const sortedPosts = response.data.sort((a, b) => {
+            if (a.timestamp && b.timestamp) {
+              return new Date(b.timestamp) - new Date(a.timestamp);
+            }
+            return 0;
+          });
+          setPosts(sortedPosts);
+        } else {
+          console.error("Error fetching posts: Response data is not an array");
+        }
       } catch (error) {
         console.error("Error fetching posts:", error);
       }
@@ -39,15 +44,22 @@ const HomePage = () => {
     fetchPosts();
   }, []);
 
-
   const createPost = async () => {
     try {
-      const response = await axios.post(`/api/users/${user._id}/statusUpdates`, {
-        content: newPostContent,
-      });
+      const response = await axios.post(
+        `/api/users/${user._id}/statusUpdates`,
+        {
+          content: newPostContent,
+        }
+      );
       setPosts([
         ...posts,
-        { _id: response.data._id, username: user.username, content: newPostContent, timestamp: response.data.timestamp },
+        {
+          _id: response.data._id,
+          username: user.username,
+          content: newPostContent,
+          timestamp: response.data.timestamp,
+        },
       ]);
       setNewPostContent("");
     } catch (error) {
@@ -59,7 +71,11 @@ const HomePage = () => {
       await axios.put(`/api/users/${user._id}/statusUpdates/${postId}`, {
         content: editingContent,
       });
-      setPosts(posts.map((post) => (post._id === postId ? { ...post, content: editingContent } : post)));
+      setPosts(
+        posts.map((post) =>
+          post._id === postId ? { ...post, content: editingContent } : post
+        )
+      );
       setEditingPost(null);
       setEditingContent("");
     } catch (error) {
@@ -149,10 +165,7 @@ const HomePage = () => {
                     </Button>
                   </>
                 )}
-                <Button
-                  onClick={() => deletePost(post._id)}
-                  color="error"
-                >
+                <Button onClick={() => deletePost(post._id)} color="error">
                   Delete
                 </Button>
               </CardActions>
