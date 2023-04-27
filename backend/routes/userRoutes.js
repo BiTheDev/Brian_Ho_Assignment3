@@ -77,28 +77,26 @@ router.put('/:userId/statusUpdates/:statusUpdateId', async (req, res) => {
 // Delete status update
 router.delete('/:userId/statusUpdates/:statusUpdateId', async (req, res) => {
   console.log("Deleting status update:", req.params.userId, req.params.statusUpdateId);
+
+  console.log("Before try block");
   try {
-    console.log("inside try block")
-    const user = await User.findById(req.params.userId);
-    if (!user) {
-      console.log("User not found:", req.params.userId);
-      return res.status(404).json({ error: 'User not found' });
-    }
-    console.log("user: ", user)
-    const statusUpdate = user.statusUpdates.id(req.params.statusUpdateId);
-    if (!statusUpdate) {
-      console.log("Status update not found:", req.params.statusUpdateId);
-      return res.status(404).json({ error: 'Status update not found' });
-    }
-    console.log("status update: ", statusUpdate)
-    statusUpdate.remove()
-    console.log("status remove successfully")
-    await user.save();
-    console.log("user saved")
+    console.log("Inside try block");
+    await User.findOneAndUpdate(
+      { _id: req.params.userId },
+      {
+        $pull: {
+          statusUpdates: { _id: req.params.statusUpdateId },
+        },
+      },
+      { useFindAndModify: false }
+    );
+    console.log("Status update removed");
     res.json({ message: 'Status update deleted successfully' });
   } catch (error) {
+    console.log("Inside catch block", error);
     res.status(500).json({ error: 'Server error' });
   }
 });
+
 
 module.exports = router;
