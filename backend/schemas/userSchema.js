@@ -1,12 +1,13 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
+const statusUpdateSchema = require('./statusUpdateSchema');
 
 const userSchema = new mongoose.Schema({
   username: String,
   password: String,
   joined: Date,
   description: String,
-  statusUpdates: [{ timestamp: Date, content: String }]
+  statusUpdates: [statusUpdateSchema]
 });
 
 userSchema.pre('save', async function (next) {
