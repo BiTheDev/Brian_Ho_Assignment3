@@ -46,8 +46,7 @@ router.get('/:userId', async (req, res) => {
 // Create status update
 router.post('/:userId/statusUpdates', async (req, res) => {
   const { content } = req.body;
-  console.log("Creating status update:", req.params.userId, content);
-  const statusUpdate = new StatusUpdate({ timestamp: new Date(), content });
+  const statusUpdate = { timestamp: new Date(), content }; // Change this line
 
   try {
     const user = await User.findById(req.params.userId);
@@ -58,6 +57,7 @@ router.post('/:userId/statusUpdates', async (req, res) => {
     res.status(500).json({ error: 'Server error' });
   }
 });
+
 
 // Update status update
 router.put('/:userId/statusUpdates/:statusUpdateId', async (req, res) => {
