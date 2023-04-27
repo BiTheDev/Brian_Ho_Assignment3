@@ -24,18 +24,17 @@ const HomePage = () => {
     const fetchPosts = async () => {
       try {
         const response = await axios.get("/api/posts");
-
-        if (Array.isArray(response.data)) {
-          const sortedPosts = response.data.sort((a, b) => {
-            if (a.timestamp && b.timestamp) {
-              return new Date(b.timestamp) - new Date(a.timestamp);
-            }
-            return 0;
-          });
-          setPosts(sortedPosts);
-        } else {
-          console.error("Error fetching posts: Response data is not an array");
+        let posts = response.data;
+        if (!Array.isArray(posts)) {
+          posts = Object.values(posts);
         }
+        const sortedPosts = posts.sort((a, b) => {
+          if (a.timestamp && b.timestamp) {
+            return new Date(b.timestamp) - new Date(a.timestamp);
+          }
+          return 0;
+        });
+        setPosts(sortedPosts);
       } catch (error) {
         console.error("Error fetching posts:", error);
       }
