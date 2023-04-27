@@ -25,14 +25,16 @@ db.once('open', () => {
 let frontend_dir = path.join(__dirname, '..', 'social-app-client', 'dist')
 
 app.use(express.static(frontend_dir));
-app.get('*', function (req, res) {
-    console.log("received request");
-    res.sendFile(path.join(frontend_dir, "index.html"));
-});
 
 // Define your routes here
 app.use('/api/users', userRoutes);
 app.use('/api/posts', postRoutes);
+
+
+app.get('*', function (req, res) {
+  console.log("received request");
+  res.sendFile(path.join(frontend_dir, "index.html"));
+});
 
 app.listen(process.env.PORT || 10000, function() {
   console.log(`Starting server now on port ${process.env.PORT || 10000}`);

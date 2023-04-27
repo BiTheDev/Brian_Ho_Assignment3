@@ -4,7 +4,6 @@ const User = require("../schemas/userSchema");
 
 router.get("/", async (req, res) => {
   try {
-    console.log("Received request for posts");
     const users = await User.find().sort({ "statusUpdates.timestamp": -1 });
     const posts = users.flatMap((user) =>
       user.statusUpdates.map((update) => ({
@@ -15,7 +14,6 @@ router.get("/", async (req, res) => {
         timestamp: update.timestamp,
       }))
     );
-    console.log("Fetched posts:", posts);
     res.json(posts);
   } catch (error) {
     console.error("Error fetching posts:", error);
