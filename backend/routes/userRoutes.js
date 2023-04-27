@@ -62,7 +62,6 @@ router.post('/:userId/statusUpdates', async (req, res) => {
 // Update status update
 router.put('/:userId/statusUpdates/:statusUpdateId', async (req, res) => {
   const { content } = req.body;
-  console.log("Updating status update:", req.params.userId, req.params.statusUpdateId, content);
   try {
     const user = await User.findById(req.params.userId);
     const statusUpdate = user.statusUpdates.id(req.params.statusUpdateId);
@@ -76,11 +75,8 @@ router.put('/:userId/statusUpdates/:statusUpdateId', async (req, res) => {
 
 // Delete status update
 router.delete('/:userId/statusUpdates/:statusUpdateId', async (req, res) => {
-  console.log("Deleting status update:", req.params.userId, req.params.statusUpdateId);
 
-  console.log("Before try block");
   try {
-    console.log("Inside try block");
     await User.findOneAndUpdate(
       { _id: req.params.userId },
       {
@@ -90,10 +86,8 @@ router.delete('/:userId/statusUpdates/:statusUpdateId', async (req, res) => {
       },
       { useFindAndModify: false }
     );
-    console.log("Status update removed");
     res.json({ message: 'Status update deleted successfully' });
   } catch (error) {
-    console.log("Inside catch block", error);
     res.status(500).json({ error: 'Server error' });
   }
 });
