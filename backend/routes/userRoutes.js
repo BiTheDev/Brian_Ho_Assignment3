@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcrypt');
 const User = require('../schemas/userSchema');
+const StatusUpdate = require('../schemas/statusUpdateSchema');
 
 // Register
 router.post('/register', async (req, res) => {
@@ -45,22 +46,27 @@ router.get('/:userId', async (req, res) => {
 // Create status update
 router.post('/:userId/statusUpdates', async (req, res) => {
   const { content } = req.body;
-  const statusUpdate = { timestamp: new Date(), content };
+  const statusUpdate = { timestamp: new Date(), content }; // Change this line
 
   try {
-    await User.updateOne({ _id: req.params.userId }, { $push: { statusUpdates: statusUpdate } });
+    const user = await User.findById(req.params.userId);
+    user.statusUpdates.push(statusUpdate);
+    await user.save();
     res.status(201).json(statusUpdate);
   } catch (error) {
     res.status(500).json({ error: 'Server error' });
   }
 });
 
+
 // Update status update
 router.put('/:userId/statusUpdates/:statusUpdateId', async (req, res) => {
   const { content } = req.body;
-
   try {
-    await User.updateOne({ _id: req.params.userId, 'statusUpdates._id': req.params.statusUpdateId }, { 'statusUpdates.$.content': content });
+    const user = await User.findById(req.params.userId);
+    const statusUpdate = user.statusUpdates.id(req.params.statusUpdateId);
+    statusUpdate.content = content;
+    await user.save();
     res.json({ message: 'Status update updated successfully' });
   } catch (error) {
     res.status(500).json({ error: 'Server error' });
@@ -69,12 +75,22 @@ router.put('/:userId/statusUpdates/:statusUpdateId', async (req, res) => {
 
 // Delete status update
 router.delete('/:userId/statusUpdates/:statusUpdateId', async (req, res) => {
+
   try {
-    await User.updateOne({ _id: req.params.userId }, { $pull: { statusUpdates: { _id: req.params.statusUpdateId } } });
+    await User.findOneAndUpdate(
+      { _id: req.params.userId },
+      {
+        $pull: {
+          statusUpdates: { _id: req.params.statusUpdateId },
+        },
+      },
+      { useFindAndModify: false }
+    );
     res.json({ message: 'Status update deleted successfully' });
   } catch (error) {
     res.status(500).json({ error: 'Server error' });
   }
 });
+
 
 module.exports = router;

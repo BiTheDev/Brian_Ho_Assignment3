@@ -48,25 +48,43 @@ const HomePage = () => {
       });
       setPosts([
         ...posts,
-        { _id: response.data._id, username: user.username, content: newPostContent, timestamp: response.data.timestamp },
+        {
+          _id: response.data._id,
+          userId: user._id,
+          username: user.username,
+          content: response.data.content,
+          timestamp: response.data.timestamp,
+        },
       ]);
       setNewPostContent("");
     } catch (error) {
       console.error("Error creating post:", error);
     }
   };
+  
+  
   const updatePost = async (postId) => {
     try {
       await axios.put(`/api/users/${user._id}/statusUpdates/${postId}`, {
         content: editingContent,
       });
-      setPosts(posts.map((post) => (post._id === postId ? { ...post, content: editingContent } : post)));
+      setPosts(
+        posts.map((post) =>
+          post._id === postId
+            ? {
+                ...post,
+                content: editingContent,
+              }
+            : post
+        )
+      );
       setEditingPost(null);
       setEditingContent("");
     } catch (error) {
       console.error("Error updating post:", error);
     }
   };
+  
 
   const deletePost = async (postId) => {
     try {
@@ -76,6 +94,7 @@ const HomePage = () => {
       console.error("Error deleting post:", error);
     }
   };
+  
 
   return (
     <Container maxWidth="sm">
