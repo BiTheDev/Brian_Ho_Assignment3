@@ -34,6 +34,6 @@ app.get('*', function (req, res) {
 app.use('/api/users', userRoutes);
 app.use('/api/posts', postRoutes);
 
-app.listen(process.env.PORT || 8000, function() {
-  console.log(`Starting server now on port ${process.env.PORT || 8000}`);
+app.listen(process.env.PORT || 10000, function() {
+  console.log(`Starting server now on port ${process.env.PORT || 10000}`);
 })
