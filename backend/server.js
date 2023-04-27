@@ -31,8 +31,8 @@ app.get('*', function (req, res) {
 });
 
 // Define your routes here
-app.use('/users', userRoutes);
-app.use('/posts', postRoutes);
+app.use('/api/users', userRoutes);
+app.use('/api/posts', postRoutes);
 
 app.listen(process.env.PORT || 8000, function() {
   console.log("Starting server now...")
